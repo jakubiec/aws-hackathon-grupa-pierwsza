@@ -7,7 +7,7 @@ resource "aws_vpc" "vpc" {
 
   tags {
     Name = "${format("%s-%s", "vpc", var.env)}"
-    Env = "${var.env}"
+    Env  = "${var.env}"
   }
 }
 
@@ -17,6 +17,7 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_internet_gateway" "ig" {
   vpc_id = "${aws_vpc.vpc.id}"
+
   tags {
     Name        = "${format("%s-%s", "ig", var.env)}"
     Environment = "${var.env}"
@@ -33,38 +34,38 @@ resource "aws_nat_gateway" "nat-gw" {
 ######################
 
 resource "aws_subnet" "pubnet1" {
-  vpc_id     = "${aws_vpc.vpc.id}"
-  cidr_block = "10.0.1.0/24"
+  vpc_id                  = "${aws_vpc.vpc.id}"
+  cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true
-  availability_zone = "eu-west-1a"
+  availability_zone       = "eu-west-1a"
 
   tags {
     Name = "${format("%s-%s", "pubnet1", var.env)}"
-    Env = "${var.env}"
+    Env  = "${var.env}"
   }
 }
 
 resource "aws_subnet" "pubnet2" {
-  vpc_id     = "${aws_vpc.vpc.id}"
-  cidr_block = "10.0.2.0/24"
+  vpc_id                  = "${aws_vpc.vpc.id}"
+  cidr_block              = "10.0.2.0/24"
   map_public_ip_on_launch = true
-  availability_zone = "eu-west-1b"
+  availability_zone       = "eu-west-1b"
 
   tags {
     Name = "${format("%s-%s", "pubnet2", var.env)}"
-    Env = "${var.env}"
+    Env  = "${var.env}"
   }
 }
 
 resource "aws_subnet" "pubnet3" {
-  vpc_id     = "${aws_vpc.vpc.id}"
-  cidr_block = "10.0.3.0/24"
+  vpc_id                  = "${aws_vpc.vpc.id}"
+  cidr_block              = "10.0.3.0/24"
   map_public_ip_on_launch = true
-  availability_zone = "eu-west-1c"
+  availability_zone       = "eu-west-1c"
 
   tags {
     Name = "${format("%s-%s", "pubnet3", var.env)}"
-    Env = "${var.env}"
+    Env  = "${var.env}"
   }
 }
 
@@ -73,38 +74,38 @@ resource "aws_subnet" "pubnet3" {
 #######################
 
 resource "aws_subnet" "privnet1" {
-  vpc_id     = "${aws_vpc.vpc.id}"
-  cidr_block = "10.0.11.0/24"
+  vpc_id                  = "${aws_vpc.vpc.id}"
+  cidr_block              = "10.0.11.0/24"
   map_public_ip_on_launch = false
-  availability_zone = "eu-west-1a"
+  availability_zone       = "eu-west-1a"
 
   tags {
     Name = "${format("%s-%s", "privnet1", var.env)}"
-    Env = "${var.env}"
+    Env  = "${var.env}"
   }
 }
 
 resource "aws_subnet" "privnet2" {
-  vpc_id     = "${aws_vpc.vpc.id}"
-  cidr_block = "10.0.12.0/24"
+  vpc_id                  = "${aws_vpc.vpc.id}"
+  cidr_block              = "10.0.12.0/24"
   map_public_ip_on_launch = false
-  availability_zone = "eu-west-1b"
+  availability_zone       = "eu-west-1b"
 
   tags {
     Name = "${format("%s-%s", "privnet2", var.env)}"
-    Env = "${var.env}"
+    Env  = "${var.env}"
   }
 }
 
 resource "aws_subnet" "privnet3" {
-  vpc_id     = "${aws_vpc.vpc.id}"
-  cidr_block = "10.0.13.0/24"
+  vpc_id                  = "${aws_vpc.vpc.id}"
+  cidr_block              = "10.0.13.0/24"
   map_public_ip_on_launch = false
-  availability_zone = "eu-west-1c"
+  availability_zone       = "eu-west-1c"
 
   tags {
     Name = "${format("%s-%s", "privnet3", var.env)}"
-    Env = "${var.env}"
+    Env  = "${var.env}"
   }
 }
 
@@ -114,10 +115,12 @@ resource "aws_subnet" "privnet3" {
 
 resource "aws_route_table" "rt-public1" {
   vpc_id = "${aws_vpc.vpc.id}"
+
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.ig.id}"
   }
+
   tags {
     Name        = "${format("%s-%s", "rt-public1", var.env)}"
     Environment = "${var.env}"
@@ -145,10 +148,12 @@ resource "aws_route_table_association" "rt-asso-public3" {
 
 resource "aws_route_table" "rt-private1" {
   vpc_id = "${aws_vpc.vpc.id}"
+
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = "${aws_nat_gateway.nat-gw.id}"
   }
+
   tags {
     Name        = "${format("%s-%s", "rt-private1", var.env)}"
     Environment = "${var.env}"
@@ -209,4 +214,3 @@ output "privnet2-id" {
 output "privnet3-id" {
   value = "${aws_subnet.privnet3.id}"
 }
-
